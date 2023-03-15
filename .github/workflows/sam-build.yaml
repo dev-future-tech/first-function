@@ -12,12 +12,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Set up Java 11
-        uses: actions/setup-java@v3
+      - uses: aws-actions/setup-sam@v2
         with:
-          java-version: '11'
-          distribution: 'temurin'
-          cache: maven
-      - name: Build with Maven first
-        working-directory: ./HelloWorldFunction
-        run: mvn -B package -DskipTests=true -Dsetup=github -s .maven_settings.xml --file pom.xml
+          use-installer: true
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-2
+      - run: sam build --use-container
