@@ -1,0 +1,23 @@
+name: SAM Serverless Build
+
+on:
+  push:
+    branches: ['*']
+  pull_request:
+    branches: ['*']
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Java 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+          cache: maven
+      - name: Build with Maven first
+        working-directory: ./HelloWorldFunction
+        run: mvn -B package -DskipTests=true -Dsetup=github -s .maven_settings.xml --file pom.xml
